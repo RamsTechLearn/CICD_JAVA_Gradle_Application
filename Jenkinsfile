@@ -69,7 +69,7 @@ pipeline{
                script{
                    
                         dir('kubernetes/') {
-                          sh 'helm upgrade --install --set image.repository="3.238.75.189/:8083/springapp" --set image.tag="${VERSION}" myjavaapp myapp/ ' 
+                          sh 'helm upgrade --install --set image.repository="3.238.75.189:8083/springapp" --set image.tag="${VERSION}" myjavaapp myapp/ ' 
                         }
                     
                }
