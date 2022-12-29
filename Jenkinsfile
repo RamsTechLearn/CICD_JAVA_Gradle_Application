@@ -5,7 +5,11 @@ pipeline{
     }
     stages{
         stage("sonar quality check"){
-            
+            agent {
+                docker {
+                    image 'openjdk:11'
+                }
+            }
             steps{
                 script{
                     withSonarQubeEnv(credentialsId: 'sonar-token') {
@@ -78,7 +82,7 @@ pipeline{
         stage('verifying app deployment'){
             steps{
                 script{
-                     withCredentials([file(credentialsId: 'kubernetes-config1', variable: 'KUBECONFIG')]) {
+                     withCredentials([kubeconfigFile(credentialsId: 'kubernetes-config1', variable: 'KUBECONFIG')]) {
                          sh 'kubectl run curl --image=curlimages/curl -i --rm --restart=Never -- curl myjavaapp-myapp:8080'
 
                      }
