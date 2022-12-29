@@ -67,9 +67,9 @@ pipeline{
         stage('Deploying application on k8s cluster') {
             steps {
                script{
-                   withKubeConfig([credentialsId: 'KUBECONFIG', serverUrl: 'https://172.31.1.88:6443']) {
+                   withCredentials([kubeconfigFile(credentialsId: 'kubernetes-config', variable: 'KUBECONFIG')]) {
                         dir('kubernetes/') {
-                          sh 'helm upgrade --install --set image.repository="3.238.75.189:8083/springapp" --set image.tag="${VERSION}" myjavaapp myapp/ ' 
+                          sh 'helm upgrade --install --set image.repository="3.236.199.40:8083/springapp" --set image.tag="${VERSION}" myjavaapp myapp/ ' 
                         }
                    }
                }
