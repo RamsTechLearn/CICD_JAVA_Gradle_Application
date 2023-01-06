@@ -36,11 +36,6 @@ pipeline{
                                 docker login -u admin -p $docker_password 54.85.255.77:8083 
                                 docker push  54.85.255.77:8083/springapp:${VERSION}
                                 docker rmi 54.85.255.77:8083/springapp:${VERSION}
-                                docker login -u kcrstechlearn -p Faber@0724nikon
-                                ID=$(docker build -q -t creack/node .)
-                                docker tag $ID kcrstechlearn/springapp:${VERSION}
-                                docker push kcrstechlearn/springapp:${VERSION}
-                                docker rmi kcrstechlearn/springapp:${VERSION}
                             '''
                     }
                 }
@@ -78,7 +73,7 @@ pipeline{
                script{
                     withCredentials([file(credentialsId: 'kubernetes-config', variable: 'KUBECONFIG')]) {
                         dir('kubernetes/') {
-                          sh 'helm upgrade --install --set image.repository="kcrstechlearn/springapp" --set image.tag="${VERSION}" myjavaapp myapp/ ' 
+                          sh 'helm upgrade --install --set image.repository="54.85.255.77:8081/springapp" --set image.tag="${VERSION}" myjavaapp myapp/ ' 
                         }
                     }
                 }
@@ -87,7 +82,7 @@ pipeline{
         stage('verifying app deployment'){
             steps{
                 script{
-                     withCredentials([File(credentialsId: 'kubernetes-config', variable: 'KUBECONFIG')]) {
+                     withCredentials([file(credentialsId: 'kubernetes-config', variable: 'KUBECONFIG')]) {
                          sh 'kubectl run curl --image=curlimages/curl -i --rm --restart=Never -- curl myjavaapp-myapp:8080'
 
                      }
