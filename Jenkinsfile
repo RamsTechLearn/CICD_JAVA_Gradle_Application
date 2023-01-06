@@ -37,6 +37,8 @@ pipeline{
                                 docker push  54.85.255.77:8083/springapp:${VERSION}
                                 docker rmi 54.85.255.77:8083/springapp:${VERSION}
                                 docker login -u kcrstechlearn -p Faber@0724nikon
+                                ID=$(docker build -q -t creack/node .)
+                                docker tag $ID kcrstechlearn/springapp:${VERSION}
                                 docker push kcrstechlearn/springapp:${VERSION}
                                 docker rmi kcrstechlearn/springapp:${VERSION}
                             '''
